@@ -1,35 +1,10 @@
-export class UserEntity {
-    constructor({ id=null, name, email, password, baseCurrency = 'BOB',isActive=true,  createdAt= new Date(), updatedAt }) {
-        if (!name || String(name).trim().length < 2) {
-            throw new BadRequestError('Name is required and must be at least 2 characters long');
-        }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!email|| !emailRegex.test(String(email).trim())) {
-            throw new BadRequestError('A valid email is required');
-        }
-        if (!baseCurrency || String(baseCurrency).trim().length !== 3) {
-            throw new BadRequestError('Base currency is required and must be a 3-letter code');
-        }
- 
+export default class UserEntity {
+    constructor({ id, name, email, password, role, baseCurrency }) {
         this.id = id;
-        this.name = String(name).trim();
-        this.email = String(email).trim().toLocaleLowerCase();
+        this.name = name;
+        this.email = email;
         this.password = password;
-        this.baseCurrency = String(baseCurrency).trim().toUpperCase();
-        this.isActive = Boolean(isActive);
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt || createdAt;
+        this.role = role || "user";
+        this.baseCurrency = baseCurrency || "BOB";
     }
- 
-    toPublicProfile() {
-        return {
-            id: this.id,
-            name: this.name,
-            email: this.email,
-            baseCurrency: this.baseCurrency,
-            isActive: this.isActive,
-            createdAt: this.createdAt
-        };
-    }
- 
 }
