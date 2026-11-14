@@ -1,15 +1,20 @@
+import 'dotenv/config';
 import { Sequelize } from "sequelize";
  
-const sequelize = new Sequelize(
-    process.env.MYSQL_DB || process.env.MYSQL_DATABASE,
-    process.env.MYSQL_USER,
-    process.env.MYSQL_PASSWORD,
-    {
-        host: process.env.MYSQL_HOST,
-        dialect: "mysql",
-        logging: false
-    }
-);
+ 
+const rawHost = process.env.MYSQL_HOST;
+const [host, portFromHost] = rawHost.split(":");
+const port = Number(process.env.MYSQL_PORT || portFromHost || 3306);
+const database = process.env.MYSQL_DB;
+const user = process.env.MYSQL_USER;
+const password = process.env.MYSQL_PASSWORD;
+ 
+const sequelize = new Sequelize(database, user, password, {
+    host,
+    port,
+    dialect: "mysql",
+    logging: false
+});
  
 export const connectMysql = async () => {
     try {
